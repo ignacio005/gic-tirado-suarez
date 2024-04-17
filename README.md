@@ -1,1 +1,1 @@
-# gic-tirado-suarez
+Ignacio Tirado Meza y Davo Fabio Suárez Álvarez, ambos del grupo 101 de GISI.
