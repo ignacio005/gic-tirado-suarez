@@ -2,6 +2,7 @@ package es.ceu.gisi.modcomp.gic_algorithms;
 
 import es.ceu.gisi.modcomp.gic_algorithms.exceptions.CFGAlgorithmsException;
 import es.ceu.gisi.modcomp.gic_algorithms.interfaces.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -24,8 +25,16 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si el elemento no es una letra mayúscula o
      *                                si ya está en el conjunto.
      */
+    ArrayList <Character> gramatica = new ArrayList<>();
     public void addNonTerminal(char nonterminal) throws CFGAlgorithmsException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if(Character.isUpperCase(nonterminal)){ // este condicional, comprueba que la letra es mayúscula y se añade a la gramática.
+            gramatica.add(nonterminal);
+        }else if (gramatica.contains(nonterminal)){ // este condicional, comprueba que la letra no esé repetida en la gramática, si esto sucede lanza una extepción.
+            throw new CFGAlgorithmsException ("Ya hay una letra igual.");
+        }else{ // este else, hace que se lance una extepción si la letra no es mayúscula.
+            throw new CFGAlgorithmsException("La letra no es mayúscula."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        }
+ 
     }
 
 
