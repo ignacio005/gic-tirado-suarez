@@ -116,7 +116,14 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return Un conjunto con los terminales definidos.
      */
     public Set<Character> getTerminals() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Set <Character> terminals = new HashSet <> (); // creo un conjunto donde guardar los terminales.
+        for(int i=0; i<grammar.size();i++){ // el bucle es para recorrer la gramática.
+            if(Character.isUpperCase(grammar.get(i))){ // este condicional, comprueba que las letras de la gramática sean minúsculas y si esto se cumple las añade al conjunto.
+                terminals.add(grammar.get(i));
+            }
+        }
+        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return terminals;
     }
 
 
