@@ -30,7 +30,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public void addNonTerminal(char nonterminal) throws CFGAlgorithmsException {
         if(Character.isUpperCase(nonterminal)){ // este condicional, comprueba que la letra es mayúscula y se añade a la gramática.
             grammar.add(nonterminal);
-        }else if (grammar.contains(nonterminal)){ // este condicional, comprueba que la letra no esé repetida en la gramática, si esto sucede lanza una extepción.
+        }else if (grammar.contains(nonterminal)){ // este condicional, comprueba que la letra no esté repetida en la gramática, si esto sucede lanza una extepción.
             throw new CFGAlgorithmsException ("Ya hay una letra igual.");
         }else{ // este else, hace que se lance una extepción si la letra no es mayúscula.
             throw new CFGAlgorithmsException("La letra no es mayúscula."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -62,9 +62,9 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return Un conjunto con los no terminales definidos.
      */
     public Set<Character> getNonTerminals() {
-        Set <Character> nonterminals = new HashSet<>();
-        for(int i=0; i<grammar.size();i++){
-            if(Character.isUpperCase(grammar.get(i))){
+        Set <Character> nonterminals = new HashSet<>(); // creo un conjunto donde guardar los no terminales.
+        for(int i=0; i<grammar.size();i++){ // el bucle es para recorrer la gramática.
+            if(Character.isUpperCase(grammar.get(i))){ // este condicional, comprueba que las letras de la gramática sean mayúsculas y si esto se cumple las añade al conjunto.
                 nonterminals.add(grammar.get(i));
             }
         }
@@ -83,6 +83,13 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *                                si ya está en el conjunto.
      */
     public void addTerminal(char terminal) throws CFGAlgorithmsException {
+        if (Character.isLowerCase(terminal)){ // este condicional, comprueba que la letra sea minúscula y se añade a la gramática.
+            grammar.add(terminal);
+        }else if (grammar.contains(terminal)){ // este condicional, comprueba que la letra no esté repetida en la gramática, si esto sucede lanza una extepción.
+            throw new CFGAlgorithmsException ("Ya hay una letra igual.");
+        }else{ // este else, hace que se lance una extepción si la letra no es minúscula.
+            throw new CFGAlgorithmsException("La letra no es minúscula.");
+        }
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
