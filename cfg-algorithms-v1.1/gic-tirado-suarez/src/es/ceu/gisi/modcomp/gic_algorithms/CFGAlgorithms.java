@@ -118,7 +118,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public Set<Character> getTerminals() {
         Set <Character> terminals = new HashSet <> (); // creo un conjunto donde guardar los terminales.
         for(int i=0; i<grammar.size();i++){ // el bucle es para recorrer la gramática.
-            if(Character.isUpperCase(grammar.get(i))){ // este condicional, comprueba que las letras de la gramática sean minúsculas y si esto se cumple las añade al conjunto.
+            if(Character.isLowerCase(grammar.get(i))){ // este condicional, comprueba que las letras de la gramática sean minúsculas y si esto se cumple las añade al conjunto.
                 terminals.add(grammar.get(i));
             }
         }
