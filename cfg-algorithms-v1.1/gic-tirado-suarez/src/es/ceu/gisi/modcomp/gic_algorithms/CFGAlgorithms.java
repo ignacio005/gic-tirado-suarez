@@ -90,7 +90,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         }else{ // este else, hace que se lance una extepción si la letra no es minúscula.
             throw new CFGAlgorithmsException("La letra no es minúscula.");
         }
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 
