@@ -50,7 +50,12 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
     public void removeNonTerminal(char nonterminal) throws CFGAlgorithmsException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if(Character.isUpperCase(nonterminal) && grammar.contains(nonterminal)){ // este condicional, comprueba si la letra es mayúscula y si está contenida en la gramática pra posteriormente eliminarla.
+            grammar.remove(nonterminal);
+        }else{
+            throw new CFGAlgorithmsException("El elemento no pertenece a la gramática y no se puede eliminar.");
+        }
+        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 
