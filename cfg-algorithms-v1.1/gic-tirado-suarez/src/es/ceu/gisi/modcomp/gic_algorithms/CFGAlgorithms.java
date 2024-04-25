@@ -50,12 +50,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
     public void removeNonTerminal(char nonterminal) throws CFGAlgorithmsException {
-        if(Character.isUpperCase(nonterminal) && grammar.contains(nonterminal)){ // este condicional, comprueba si la letra es mayúscula y si está contenida en la gramática pra posteriormente eliminarla.
-            grammar.remove(nonterminal);
-        }else{
-            throw new CFGAlgorithmsException("El elemento no pertenece a la gramática y no se puede eliminar.");
-        }
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 
@@ -109,11 +104,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
     public void removeTerminal(char terminal) throws CFGAlgorithmsException {
-        if(Character.isLowerCase(terminal) && grammar.contains(terminal)){ // este condicional, comprueba que el terminal es minúscula y que la gramática contiene ese terminal. 
-            grammar.remove(terminal); // borra el terminal.
-        }else{
-            throw new CFGAlgorithmsException ("Este elemento no pertenece a la gramática, y no se puede borrar. ");
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 
@@ -147,7 +138,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *                                del conjunto de elementos no terminales.
      */
     public void setStartSymbol(char nonterminal) throws CFGAlgorithmsException {
-        
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
