@@ -61,8 +61,8 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *
      * @return Un conjunto con los no terminales definidos.
      */
+    Set <Character> nonterminals = new HashSet<>(); // creo un conjunto donde guardar los no terminales.
     public Set<Character> getNonTerminals() {
-        Set <Character> nonterminals = new HashSet<>(); // creo un conjunto donde guardar los no terminales.
         for(int i=0; i<grammar.size();i++){ // el bucle es para recorrer la gramática.
             if(Character.isUpperCase(grammar.get(i))){ // este condicional, comprueba que las letras de la gramática sean mayúsculas y si esto se cumple las añade al conjunto.
                 nonterminals.add(grammar.get(i));
@@ -138,7 +138,13 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *                                del conjunto de elementos no terminales.
      */
     public void setStartSymbol(char nonterminal) throws CFGAlgorithmsException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (nonterminals.contains(nonterminal)){
+            char startsymbol = nonterminal;
+            grammar.add(startsymbol);
+        }else{
+            throw new CFGAlgorithmsException("El elemento insertado no forma parate de los elementos no terminales.");
+        }
+        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 
