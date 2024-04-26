@@ -113,7 +113,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return Un conjunto con los terminales definidos.
      */
     public Set<Character> getTerminals() {
-        
+        return terminals;
     }
 
 
