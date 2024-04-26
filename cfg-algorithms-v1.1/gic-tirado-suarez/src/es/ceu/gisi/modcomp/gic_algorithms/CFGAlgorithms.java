@@ -37,7 +37,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
          }else if(Character.isAlphabetic(nonterminal) && Character.isUpperCase(nonterminal)){ // este condicional, comprueba que la letra es mayúscula y se añade a la gramática.
             nonterminals.add(nonterminal); 
         } else{ // este else, hace que se lance una extepción si la letra no es mayúscula.
-            throw new CFGAlgorithmsException("La letra no es mayúscula."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            throw new CFGAlgorithmsException("La letra no es mayúscula."); 
         }
  
     }
@@ -80,14 +80,14 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *                                si ya está en el conjunto.
      */
     public void addTerminal(char terminal) throws CFGAlgorithmsException {
-        if (Character.isLowerCase(terminal)){ // este condicional, comprueba que la letra sea minúscula y se añade a la gramática.
-            grammar.add(terminal);
-        }else if (grammar.contains(terminal)){ // este condicional, comprueba que la letra no esté repetida en la gramática, si esto sucede lanza una extepción.
-            throw new CFGAlgorithmsException ("Ya hay una letra igual.");
+        if (terminals.contains(terminal)){ // este condicional, comprueba que la letra no esté repetida en la gramática, si esto sucede lanza una extepción.
+            throw new CFGAlgorithmsException ("Ya hay un terminal igual.");
+        }else if (Character.isAlphabetic(terminal) && Character.isLowerCase(terminal)){ // este condicional, comprueba que la letra sea minúscula y se añade a la gramática.
+            terminals.add(terminal);
         }else{ // este else, hace que se lance una extepción si la letra no es minúscula.
             throw new CFGAlgorithmsException("La letra no es minúscula.");
         }
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+ 
     }
 
 
@@ -113,14 +113,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return Un conjunto con los terminales definidos.
      */
     public Set<Character> getTerminals() {
-        Set <Character> terminals = new HashSet <> (); // creo un conjunto donde guardar los terminales.
-        for(int i=0; i<grammar.size();i++){ // el bucle es para recorrer la gramática.
-            if(Character.isLowerCase(grammar.get(i))){ // este condicional, comprueba que las letras de la gramática sean minúsculas y si esto se cumple las añade al conjunto.
-                terminals.add(grammar.get(i));
-            }
-        }
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        return terminals;
+        
     }
 
 
