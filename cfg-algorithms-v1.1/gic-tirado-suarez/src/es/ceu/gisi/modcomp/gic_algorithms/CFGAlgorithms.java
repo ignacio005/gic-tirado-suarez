@@ -2,10 +2,7 @@ package es.ceu.gisi.modcomp.gic_algorithms;
 
 import es.ceu.gisi.modcomp.gic_algorithms.exceptions.CFGAlgorithmsException;
 import es.ceu.gisi.modcomp.gic_algorithms.interfaces.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 
@@ -18,6 +15,14 @@ import java.util.Set;
  */
 public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface, CYKInterface {
 
+    private Set<Character> nonterminals = new TreeSet();
+    private Set<Character> terminals = new TreeSet();
+    private Map<Character, List<String>> productions = new TreeMap();
+    private Character startsymbol;
+    
+    private ArrayList<Character> grammar = new ArrayList();
+    
+    
     /**
      * Método que añade los elementos no terminales de la gramática.
      *
@@ -26,13 +31,12 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si el elemento no es una letra mayúscula o
      *                                si ya está en el conjunto.
      */
-    ArrayList <Character> grammar = new ArrayList<>();
     public void addNonTerminal(char nonterminal) throws CFGAlgorithmsException {
-        if(Character.isUpperCase(nonterminal)){ // este condicional, comprueba que la letra es mayúscula y se añade a la gramática.
-            grammar.add(nonterminal);
-        }else if (grammar.contains(nonterminal)){ // este condicional, comprueba que la letra no esté repetida en la gramática, si esto sucede lanza una extepción.
-            throw new CFGAlgorithmsException ("Ya hay una letra igual.");
-        }else{ // este else, hace que se lance una extepción si la letra no es mayúscula.
+         if (nonterminals.contains(nonterminal)){ // este condicional, comprueba que la letra no esté repetida en la gramática, si esto sucede lanza una extepción.
+            throw new CFGAlgorithmsException ("Ya hay un no terminal igual.");
+         }else if(Character.isAlphabetic(nonterminal) && Character.isUpperCase(nonterminal)){ // este condicional, comprueba que la letra es mayúscula y se añade a la gramática.
+            nonterminals.add(nonterminal); 
+        } else{ // este else, hace que se lance una extepción si la letra no es mayúscula.
             throw new CFGAlgorithmsException("La letra no es mayúscula."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         }
  
@@ -61,15 +65,8 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *
      * @return Un conjunto con los no terminales definidos.
      */
-    Set <Character> nonterminals = new HashSet<>(); // creo un conjunto donde guardar los no terminales.
     public Set<Character> getNonTerminals() {
-        for(int i=0; i<grammar.size();i++){ // el bucle es para recorrer la gramática.
-            if(Character.isUpperCase(grammar.get(i))){ // este condicional, comprueba que las letras de la gramática sean mayúsculas y si esto se cumple las añade al conjunto.
-                nonterminals.add(grammar.get(i));
-            }
-        }
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        return nonterminals;
+        
     }
 
 
@@ -138,9 +135,8 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *                                del conjunto de elementos no terminales.
      */
     public void setStartSymbol(char nonterminal) throws CFGAlgorithmsException {
-        if (nonterminals.contains(nonterminal)){
-            char startsymbol = nonterminal;
-            grammar.add(startsymbol);
+        if (this.nonterminals.contains(nonterminal)){
+            this.startsymbol = nonterminal;
         }else{
             throw new CFGAlgorithmsException("El elemento insertado no forma parate de los elementos no terminales.");
         }
@@ -176,7 +172,10 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *                                (terminales o no terminales) no definidos previamente.
      */
     public void addProduction(char nonterminal, String production) throws CFGAlgorithmsException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        HashMap <Character, String> mapa = new HashMap<>();
+        mapa.put(nonterminal, production);
+        
+        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 
