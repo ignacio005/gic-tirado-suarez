@@ -66,7 +66,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return Un conjunto con los no terminales definidos.
      */
     public Set<Character> getNonTerminals() {
-        
+        return nonterminals;
     }
 
 
