@@ -162,9 +162,9 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si está compuesta por elementos
      *                                (terminales o no terminales) no definidos previamente.
      */
-    public void addProduction(char nonterminal, String production) throws CFGAlgorithmsException {
+    public void addProduction(char nonterminal, String production) throws CFGAlgorithmsException { //preguntar en tutoria
         
-        if (production.contains(String.valueOf(nonterminals)) || production.contains("l")){
+        if (production.contains(String.valueOf(nonterminals)) || production.contains("l") || production.contains(String.valueOf(terminals))){
             productions.put(nonterminal, new ArrayList<>());
             productions.get(nonterminal).add(production);
         }else{
@@ -203,7 +203,8 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *         derecha de cada producción
      */
     public List<String> getProductions(char nonterminal) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return productions.get(nonterminal); // devuelve la lista de producciones de ese no terminal.
+        
     }
 
 
