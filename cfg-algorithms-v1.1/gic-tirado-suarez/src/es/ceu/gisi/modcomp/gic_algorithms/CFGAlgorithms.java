@@ -20,8 +20,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     private Map<Character, List<String>> productions = new TreeMap();
     private Character startsymbol;
     
-    private ArrayList<Character> grammar = new ArrayList();
-    
     
     /**
      * Método que añade los elementos no terminales de la gramática.
@@ -128,12 +126,12 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *                                del conjunto de elementos no terminales.
      */
     public void setStartSymbol(char nonterminal) throws CFGAlgorithmsException {
-        if (this.nonterminals.contains(nonterminal)){
-            this.startsymbol = nonterminal;
-        }else{
+        if (this.nonterminals.contains(nonterminal)){ // este condicional, comprueba que el no terminal está comprendido en el conjunto.
+            this.startsymbol = nonterminal; // fijo que este no terminal es el axioma.
+        }else{ // este else hace que se lance una extepción si no forma parte del conjunto de los no terminales.
             throw new CFGAlgorithmsException("El elemento insertado no forma parate de los elementos no terminales.");
         }
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
     }
 
 
@@ -165,10 +163,14 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *                                (terminales o no terminales) no definidos previamente.
      */
     public void addProduction(char nonterminal, String production) throws CFGAlgorithmsException {
-        HashMap <Character, String> mapa = new HashMap<>();
-        mapa.put(nonterminal, production);
         
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (production.contains(String.valueOf(nonterminals)) || production.contains("l")){
+            productions.put(nonterminal, new ArrayList<>());
+            productions.get(nonterminal).add(production);
+        }else{
+            throw new CFGAlgorithmsException("Estás utilizando elementos terminales o no terminales no definidos en el conjunto.");
+        }
+        
     }
 
 
