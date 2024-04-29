@@ -64,7 +64,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return Un conjunto con los no terminales definidos.
      */
     public Set<Character> getNonTerminals() {
-        return nonterminals;
+        return nonterminals; // devuelve un noterminal.
     }
 
 
@@ -164,10 +164,10 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      */
     public void addProduction(char nonterminal, String production) throws CFGAlgorithmsException { //preguntar en tutoria
         
-        if (production.contains(String.valueOf(nonterminals)) || production.contains("l") || production.contains(String.valueOf(terminals))){
-            productions.put(nonterminal, new ArrayList<>());
-            productions.get(nonterminal).add(production);
-        }else{
+        if (production.contains(String.valueOf(nonterminals)) || production.contains("l") || production.contains(String.valueOf(terminals))){ // este condicional, comprueba si la producción contiene l, terminal y no terminal.
+            productions.put(nonterminal, new ArrayList<>()); // añade un no terminal y crea un nuevo List y se añade a productions.
+            productions.get(nonterminal).add(production); // añado production a la nueva lista.
+        }else{ // este else, lanza una extepción si el elemento no está en el conjunto de los terminales y no terminales.
             throw new CFGAlgorithmsException("Estás utilizando elementos terminales o no terminales no definidos en el conjunto.");
         }
         
@@ -222,8 +222,20 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *         salida podría ser: "S::=aBb|bC|dC". Las producciones DEBEN IR ORDENADAS
      *         POR ORDEN ALFABÉTICO.
      */
-    public String getProductionsToString(char nonterminal) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String getProductionsToString(char nonterminal) { //preguntar tutoría.
+        String symbol="::=";
+        List lista = productions.get(nonterminal); // señalo la lista del map productions.
+        Collections.sort(lista); // ordeno lista.
+        for(int i=0; i < lista.size(); i++){ // el bucle, da cada elemento de la lista y los separa con una barra.
+            lista.get(i);
+            if (i < lista.size() - 1){
+                String bar = "|";
+            }
+        }
+        return nonterminal + symbol; 
+        
+        
+        
     }
 
 
