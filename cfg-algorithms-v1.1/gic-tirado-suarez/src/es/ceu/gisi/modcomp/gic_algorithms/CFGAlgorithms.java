@@ -52,9 +52,12 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
     public void removeNonTerminal(char nonterminal) throws CFGAlgorithmsException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (nonterminals.contains(nonterminal)&& Character.isAlphabetic(nonterminal) && Character.isLowerCase(nonterminal)){
+            nonterminals.remove(nonterminal);
+        }else{ // este else, hace que se lance una extepción si no cumple las condiciones anteriores, que no sea terminal, que sea una cadena alfabética y que tenga letras minúsculas.
+            throw new CFGAlgorithmsException("La letra no es minúscula.");
+        }
     }
-
 
 
     /**
@@ -99,7 +102,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
     public void removeTerminal(char terminal) throws CFGAlgorithmsException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 
