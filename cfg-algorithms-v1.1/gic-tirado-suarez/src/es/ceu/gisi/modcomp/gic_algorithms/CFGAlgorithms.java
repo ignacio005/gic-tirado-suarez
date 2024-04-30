@@ -52,10 +52,10 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
     public void removeNonTerminal(char nonterminal) throws CFGAlgorithmsException {
-        if (nonterminals.contains(nonterminal)&& Character.isAlphabetic(nonterminal) && Character.isLowerCase(nonterminal)){
+        if (nonterminals.contains(nonterminal)){
             nonterminals.remove(nonterminal);
-        }else{ // este else, hace que se lance una extepción si no cumple las condiciones anteriores, que no sea terminal, que sea una cadena alfabética y que tenga letras minúsculas.
-            throw new CFGAlgorithmsException("La letra no es minúscula.");
+        }else{ // este else, hace que se lance una extepción si no está contenido en los noterminales.
+            throw new CFGAlgorithmsException("El elemento no pertenece a la gramática.");
         }
     }
 
