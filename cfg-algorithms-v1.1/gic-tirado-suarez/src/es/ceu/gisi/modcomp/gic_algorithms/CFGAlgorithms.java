@@ -101,11 +101,11 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
-    public void removeTerminal(char terminal) throws CFGAlgorithmsException {
-    if (terminals.contains(terminal)&& Character.isAlphabetic(terminal) && Character.isLowerCase(terminal)){
+    public void removeTerminal(char terminal) throws CFGAlgorithmsException { // preguntar tutoría.
+    if (terminals.contains(terminal)){
             terminals.remove(terminal);
-        }else{ // este else, hace que se lance una extepción si no cumple las condiciones anteriores, que sea terminal, que sea una cadena alfabética y que tenga letras minúsculas.
-            throw new CFGAlgorithmsException("La letra no es minúscula.");
+        }else{ // este else, hace que se lance una extepción si no está contenido en los terminales.
+            throw new CFGAlgorithmsException("El elemento no pertenece a la gramática.");
         }
  
     }
