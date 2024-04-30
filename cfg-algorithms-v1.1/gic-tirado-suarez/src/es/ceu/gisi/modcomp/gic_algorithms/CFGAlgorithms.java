@@ -268,10 +268,10 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * dejando el algoritmo listo para volver a insertar una gramática nueva.
      */
     public void deleteGrammar() {
-        nonterminals.clear();
-        terminals.clear();
-        productions.clear();
-        this.startsymbol=null;
+        nonterminals.clear(); // borra todo el contenido de noterminales.
+        terminals.clear(); // borra todo el contenido de terminales.
+        productions.clear(); // borra todo el contenido de producciones.
+        this.startsymbol=null; // borra el valor del axioma y le da null.
         //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
