@@ -1,11 +1,7 @@
 package es.ceu.gisi.modcomp.gic_algorithms;
-
 import es.ceu.gisi.modcomp.gic_algorithms.exceptions.CFGAlgorithmsException;
 import es.ceu.gisi.modcomp.gic_algorithms.interfaces.*;
 import java.util.*;
-
-
-
 /**
  * Esta clase contiene la implementación de las interfaces que establecen los
  * métodos necesarios para el correcto funcionamiento del
@@ -14,7 +10,6 @@ import java.util.*;
  * @author Sergio Saugar García <sergio.saugargarcia@ceu.es>
  */
 public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface, CYKInterface {
-
     private Set<Character> nonterminals = new TreeSet();
     private Set<Character> terminals = new TreeSet();
     private Map<Character, List<String>> productions = new TreeMap();
@@ -39,9 +34,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         }
  
     }
-
-
-
     /**
      * Método que elimina el símbolo no terminal indicado de la gramática.
      * También debe eliminar todas las producciones asociadas a él y las
@@ -52,14 +44,12 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
     public void removeNonTerminal(char nonterminal) throws CFGAlgorithmsException {
-        if (nonterminals.contains(nonterminal)&& Character.isAlphabetic(nonterminal) && Character.isLowerCase(nonterminal)){
+        if (nonterminals.contains(nonterminal)){
             nonterminals.remove(nonterminal);
-        }else{ // este else, hace que se lance una extepción si no cumple las condiciones anteriores, que no sea terminal, que sea una cadena alfabética y que tenga letras minúsculas.
-            throw new CFGAlgorithmsException("La letra no es mayúscula.");
+        }else{ // este else, hace que se lance una extepción si no está contenido en los noterminales.
+            throw new CFGAlgorithmsException("El elemento no pertenece a la gramática.");
         }
     }
-
-
     /**
      * Método que devuelve un conjunto con todos los símbolos no terminales de
      * la gramática.
@@ -69,9 +59,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public Set<Character> getNonTerminals() {
         return nonterminals; // devuelve un noterminal.
     }
-
-
-
     /**
      * Método que añade los elementos terminales de la gramática.
      *
@@ -90,9 +77,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         }
  
     }
-
-
-
     /**
      * Método que elimina el símbolo terminal indicado de la gramática.
      * También debe eliminar todas las producciones en las que aparece.
@@ -101,18 +85,14 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
-    public void removeTerminal(char terminal) throws CFGAlgorithmsException {
-    if (terminals.contains(terminal)&& Character.isAlphabetic(terminal) && Character.isLowerCase(terminal)){
+    public void removeTerminal(char terminal) throws CFGAlgorithmsException { // preguntar tutoría.
+    if (terminals.contains(terminal)){
             terminals.remove(terminal);
-        }else{ // este else, hace que se lance una extepción si no cumple las condiciones anteriores, que sea terminal, que sea una cadena alfabética y que tenga letras minúsculas.
-            throw new CFGAlgorithmsException("La letra no es minúscula.");
+        }else{ // este else, hace que se lance una extepción si no está contenido en los terminales.
+            throw new CFGAlgorithmsException("El elemento no pertenece a la gramática.");
         }
  
     }
-
-
-
-
     /**
      * Método que devuelve un conjunto con todos los símbolos terminales de la
      * gramática.
@@ -120,9 +100,8 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return Un conjunto con los terminales definidos.
      */
     public Set<Character> getTerminals() {
-        return terminals;
+        return terminals; // devuelve conjunto de terminales.
     }
-
 
 
     /**
@@ -142,9 +121,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         }
         
     }
-
-
-
     /**
      * Método que devuelve el axioma de la gramática.
      *
@@ -160,9 +136,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         throw new UnsupportedOperationException("El axioma todavía no ha sido establecido.");
         }
     }
-
-
-
     /**
      * Método utilizado para construir la gramática. Admite producciones de tipo
      * 2. También permite añadir producciones a lambda (lambda se representa con
@@ -185,9 +158,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         }
         
     }
-
-
-
     /**
      * Elimina la producción indicada del elemento no terminal especificado.
      *
@@ -202,9 +172,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public boolean removeProduction(char nonterminal, String production) throws CFGAlgorithmsException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Devuelve una lista de String que representan todas las producciones que
      * han sido agregadas a un elemento no terminal.
@@ -219,9 +186,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         return productions.get(nonterminal); // devuelve la lista de producciones de ese no terminal.
         
     }
-
-
-
     /**
      * Devuelve un String que representa todas las producciones que han sido
      * agregadas a un elemento no terminal.
@@ -250,9 +214,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         
         
     }
-
-
-
     /**
      * Devuelve un String con la gramática completa. Todos los elementos no
      * terminales deberán aparecer por orden alfabético (A,B,C...).
@@ -263,20 +224,18 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public String getGrammar() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Elimina todos los elementos que se han introducido hasta el momento en la
      * gramática (elementos terminales, no terminales, axioma y producciones),
      * dejando el algoritmo listo para volver a insertar una gramática nueva.
      */
     public void deleteGrammar() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        nonterminals.clear(); // borra todo el contenido de noterminales.
+        terminals.clear(); // borra todo el contenido de terminales.
+        productions.clear(); // borra todo el contenido de producciones.
+        this.startsymbol=null; // borra el valor del axioma y le da null.
+        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que comprueba si la gramática dada de alta es una gramática
      * independiente del contexto.
@@ -286,9 +245,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public boolean isCFG() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que comprueba si la gramática almacenada tiene reglas innecesarias
      * (A::=A).
@@ -298,9 +254,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public boolean hasUselessProductions() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que elimina las reglas innecesarias de la gramática almacenada.
      *
@@ -311,9 +264,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public List<String> removeUselessProductions() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que elimina los símbolos inútiles de la gramática almacenada.
      *
@@ -323,9 +273,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public List<Character> removeUselessSymbols() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que comprueba si la gramática almacenada tiene reglas no
      * generativas (reglas lambda). Excepto S::=l si sólo es para reconocer la
@@ -336,9 +283,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public boolean hasLambdaProductions() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que elimina todas las reglas no generativas de la gramática
      * almacenada. La única regla que puede quedar es S::=l y debe haber sido
@@ -351,9 +295,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public List<Character> removeLambdaProductions() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que comprueba si la gramática almacenada tiene reglas unitarias
      * (A::=B).
@@ -363,9 +304,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public boolean hasUnitProductions() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que elimina las reglas unitarias de la gramática almacenada.
      *
@@ -375,9 +313,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public List<String> removeUnitProductions() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que transforma la gramática almacenada en una gramática bien
      * formada:
@@ -389,9 +324,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public void transformToWellFormedGrammar() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que chequea que las producciones estén en Forma Normal de Chomsky.
      *
@@ -408,9 +340,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public void checkCNFProduction(char nonterminal, String production) throws CFGAlgorithmsException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que comprueba si la gramática dada de alta se encuentra en Forma
      * Normal de Chomsky. Es una precondición para la aplicación del algoritmo
@@ -421,9 +350,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public boolean isCNF() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que transforma la gramática almacenada en su Forma Normal de
      * Chomsky equivalente.
@@ -434,9 +360,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public void transformIntoCNF() throws CFGAlgorithmsException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que indica si una palabra pertenece al lenguaje generado por la
      * gramática que se ha introducido. Se utilizará el algoritmo CYK para
@@ -457,9 +380,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public boolean isDerivedUsignCYK(String word) throws CFGAlgorithmsException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-
-
     /**
      * Método que, para una palabra, devuelve un String que contiene todas las
      * celdas calculadas por el algoritmo CYK (la visualización debe ser similar
@@ -480,5 +400,4 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public String algorithmCYKStateToString(String word) throws CFGAlgorithmsException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
 }
