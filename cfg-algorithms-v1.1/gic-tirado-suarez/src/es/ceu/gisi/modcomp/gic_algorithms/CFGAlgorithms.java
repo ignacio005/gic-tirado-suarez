@@ -55,7 +55,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         if (nonterminals.contains(nonterminal)&& Character.isAlphabetic(nonterminal) && Character.isLowerCase(nonterminal)){
             nonterminals.remove(nonterminal);
         }else{ // este else, hace que se lance una extepción si no cumple las condiciones anteriores, que no sea terminal, que sea una cadena alfabética y que tenga letras minúsculas.
-            throw new CFGAlgorithmsException("La letra no es minúscula.");
+            throw new CFGAlgorithmsException("La letra no es mayúscula.");
         }
     }
 
@@ -154,7 +154,11 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *                                establecido.
      */
     public Character getStartSymbol() throws CFGAlgorithmsException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    if (this.nonterminals.contains(startsymbol)){ //comprueba si el axioma está establecido en la gramática, comprueba si el axioma se encuentra en los no terminales.
+        return startsymbol;
+    }else{
+        throw new UnsupportedOperationException("El axioma todavía no ha sido establecido.");
+        }
     }
 
 
