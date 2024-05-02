@@ -130,11 +130,11 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *                                establecido.
      */
     public Character getStartSymbol() throws CFGAlgorithmsException {
-    if (this.nonterminals.contains(startsymbol)){ //comprueba si el axioma está establecido en la gramática, comprueba si el axioma se encuentra en los no terminales.
+    if (startsymbol!=null){ // este condicional, comprueba si está vacío.
         return startsymbol;
-    }else{
-        throw new UnsupportedOperationException("El axioma todavía no ha sido establecido.");
-        }
+    }else{ // este else, en el caso de que el axioma no esté establecido lanza una extepción.
+        throw new CFGAlgorithmsException ("El axioma no a sido establecido.");
+    }
     }
     /**
      * Método utilizado para construir la gramática. Admite producciones de tipo
