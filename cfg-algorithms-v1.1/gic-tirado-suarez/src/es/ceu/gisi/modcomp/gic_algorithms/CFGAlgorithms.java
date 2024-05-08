@@ -157,17 +157,13 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * (terminales o no terminales) no definidos previamente.
      */
     public void addProduction(char nonterminal, String production) throws CFGAlgorithmsException { //preguntar en tutoria: error 8 si es por si se repite.
-        //for(int j=0; j<productions.get(nonterminal).size(); j++){
-        //    if(productions.get(nonterminal).get(j).equals(production)){
-        //        throw new CFGAlgorithmsException("Ya está añadido.");
-        //    }
-        //}
-        if (!nonterminals.contains(nonterminal)) {
+
+        if (!nonterminals.contains(nonterminal)) { // este condicional compruba que sino esta contenido el no terminal en el conjunto lanza extepción.
             throw new CFGAlgorithmsException("Estás utilizando elementos terminales o no terminales no definidos en el conjunto.");
         }
-        for (int i = 0; i < production.length(); i++) {
+        for (int i = 0; i < production.length(); i++) { // bucle que rrecorre letra por letra la producción introducida.
             char letter = production.charAt(i);
-            if (!(letter == 'l' || nonterminals.contains(letter) || terminals.contains(letter))) {
+            if (!(letter == 'l' || nonterminals.contains(letter) || terminals.contains(letter))) { // este condicional comprueba que este en terminales, no terminales o tenga l y sino se cumple lanzo extepción.
                 throw new CFGAlgorithmsException("Estás utilizando elementos terminales o no terminales no definidos en el conjunto.");
             }
 
@@ -201,13 +197,6 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
 
     }
 
-//    if (production.contains(String.valueOf(nonterminal))){ //Esta línea comprueba si la producción contiene a un no terminal
-//                productions.remove(production); //Eliminar la producción
-//                return true;
-//            }
-//            else{
-//                throw new CFGAlgorithmsException("Error: La producción no pertenecía a ese elemento no terminal.");
-//            }
     /**
      * Devuelve una lista de String que representan todas las producciones que
      * han sido agregadas a un elemento no terminal.
@@ -239,7 +228,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public String getProductionsToString(char nonterminal) { //preguntar tutoría.
         String symbol = "::=";
         List<String> lista = productions.get(nonterminal); // señalo la lista del map productions.
-        if (lista != null) {
+        if (lista != null) { // este condicional devuelve " ", si es null.
             Collections.sort(lista); // ordeno lista.
             for (int i = 0; i < lista.size(); i++) { // el bucle, da cada elemento de la lista y los separa con una barra.
                 symbol = symbol + lista.get(i);
