@@ -176,8 +176,24 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *                                elemento no terminal.
      */
     public boolean removeProduction(char nonterminal, String production) throws CFGAlgorithmsException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        for(int i=0;i<productions.get(nonterminal).size();i++){ //bucle que recorre la lista de producciones del no terminal introducido
+            if(productions.get(nonterminal).get(i).equals(production)){ //consigue la producción de la posicion por la que va en el bucle que recorre la lista de producciones y comprueba si la producción por la que va en el bucle es igual a la producción que buscamos
+                productions.get(nonterminal).remove(production); //elimina la produccion del no terminal introducido
+                return true; //devuelve true
+            }
+            }             
+        throw new CFGAlgorithmsException("Error: La producción no pertenecía a ese elemento no terminal."); //excepción que se ejecuta cuando el bucle recorrido no llega a devolver un true, eso será porque se habrá comprobado que no hay ninguna producción en la lista de producciones igual a la produccion introducida
+   
+        }
+    
+//    if (production.contains(String.valueOf(nonterminal))){ //Esta línea comprueba si la producción contiene a un no terminal 
+//                productions.remove(production); //Eliminar la producción
+//                return true;
+//            }
+//            else{
+//                throw new CFGAlgorithmsException("Error: La producción no pertenecía a ese elemento no terminal.");
+//            }
+    
     /**
      * Devuelve una lista de String que representan todas las producciones que
      * han sido agregadas a un elemento no terminal.
