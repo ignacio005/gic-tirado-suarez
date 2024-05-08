@@ -148,16 +148,22 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si está compuesta por elementos
      *                                (terminales o no terminales) no definidos previamente.
      */
-    public void addProduction(char nonterminal, String production) throws CFGAlgorithmsException { //preguntar en tutoria
+    public void addProduction(char nonterminal, String production) throws CFGAlgorithmsException { //preguntar en tutoria: error 8 si es por si se repite.
         
-        if (production.contains(String.valueOf(nonterminals)) || production.contains("l") || production.contains(String.valueOf(terminals))){ // este condicional, comprueba si la producción contiene l, terminal y no terminal.
-            productions.put(nonterminal, new ArrayList<>()); // añade un no terminal y crea un nuevo List y se añade a productions.
-            productions.get(nonterminal).add(production); // añado production a la nueva lista.
-        }else{ // este else, lanza una extepción si el elemento no está en el conjunto de los terminales y no terminales.
+        if (!nonterminals.contains(nonterminal)){
             throw new CFGAlgorithmsException("Estás utilizando elementos terminales o no terminales no definidos en el conjunto.");
         }
-        
+        for(int i = 0; i<production.length();i++){
+            char letter=production.charAt(i);
+            if(!(letter=='l'|| nonterminals.contains(letter)|| terminals.contains(letter))){
+                throw new CFGAlgorithmsException("Estás utilizando elementos terminales o no terminales no definidos en el conjunto.");
+            }
+            
+        }
+        productions.putIfAbsent(nonterminal, new ArrayList<>()); // el putIfAbsent comprueba que no esté repetido y lo añade.
+        productions.get(nonterminal).add(production);
     }
+    
     /**
      * Elimina la producción indicada del elemento no terminal especificado.
      *
@@ -201,12 +207,12 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      */
     public String getProductionsToString(char nonterminal) { //preguntar tutoría.
         String symbol="::=";
-        List lista = productions.get(nonterminal); // señalo la lista del map productions.
+        List<String> lista = productions.get(nonterminal); // señalo la lista del map productions.
         Collections.sort(lista); // ordeno lista.
         for(int i=0; i < lista.size(); i++){ // el bucle, da cada elemento de la lista y los separa con una barra.
-            lista.get(i);
+            symbol=symbol+lista.get(i);
             if (i < lista.size() - 1){
-                String bar = "|";
+                symbol= symbol+"|";
             }
         }
         return nonterminal + symbol; 
@@ -234,7 +240,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         terminals.clear(); // borra todo el contenido de terminales.
         productions.clear(); // borra todo el contenido de producciones.
         this.startsymbol=null; // borra el valor del axioma y le da null.
-        //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
     }
     /**
      * Método que comprueba si la gramática dada de alta es una gramática
