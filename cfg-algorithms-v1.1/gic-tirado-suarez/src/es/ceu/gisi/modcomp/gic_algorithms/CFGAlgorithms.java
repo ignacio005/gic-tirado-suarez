@@ -47,6 +47,19 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
     public void removeNonTerminal(char nonterminal) throws CFGAlgorithmsException {
+        Set<Character> elementosNT = productions.keySet();
+        for (Character nt : elementosNT) {
+            List<String> producciones = productions.get(nt);
+            List<String> auxiliar = new ArrayList();
+            for (String produccion : producciones) {
+                if (produccion.contains(nonterminal.tostring)) {
+                    auxiliar.add(produccion);
+                }
+                for (String p : auxiliar) {
+                    this.removeProduction(nt, p);
+                }
+            }
+        }
         if (nonterminals.contains(nonterminal)) {
             nonterminals.remove(nonterminal);
         } else { // este else, hace que se lance una extepción si no está contenido en los noterminales.
