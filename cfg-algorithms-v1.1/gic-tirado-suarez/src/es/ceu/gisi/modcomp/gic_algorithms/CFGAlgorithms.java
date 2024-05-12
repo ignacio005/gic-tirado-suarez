@@ -280,7 +280,16 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * los elementos no terminales ORDENADOS POR ORDEN ALFABÉTICO.
      */
     public String getGrammar() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String grammar = ""; // creo variable vacía
+        grammar = getTerminals().toString() + ","; // guardo los terminales en la variable.
+        grammar += getNonTerminals().toString() + ","; // guardo los no terminales en la variable.
+        for (Character noterminal : nonterminals) { // bucle para que dé los noterminales del conjunto.
+            grammar += getProductionsToString(noterminal); // guardo las producciones en la variable.
+        }
+        if (startsymbol != null) { // condicional que comprueba que el axioma no sea nulo.
+            grammar += "," + startsymbol; // guardo el axioma en la variable.
+        }
+        return grammar;
     }
 
     /**
