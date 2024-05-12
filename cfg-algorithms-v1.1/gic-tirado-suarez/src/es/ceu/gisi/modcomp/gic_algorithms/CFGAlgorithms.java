@@ -322,7 +322,14 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return True si contiene ese tipo de reglas
      */
     public boolean hasUselessProductions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for (Character nonterminal : productions.keySet()) { // este bucle me devuelve las claves del mapa productions y las guarda en nonterminal.
+            for (String production : productions.get(nonterminal)) { // este bucle me devuelve los valores de productions y las guarda en production.
+                if (production.equals(nonterminal.toString())) {  // condicional para que si se cumple que production es igual a nonterminal guarda en answer true y rompe el primer bucle.
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
