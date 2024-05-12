@@ -47,22 +47,25 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
     public void removeNonTerminal(char nonterminal) throws CFGAlgorithmsException {
-        Set<Character> elementosNT = productions.keySet();
-        for (Character nt : elementosNT) {
-            List<String> producciones = productions.get(nt);
+        for (Character nt : productions.keySet()) {
             List<String> auxiliar = new ArrayList();
-            for (String produccion : producciones) {
-                if (produccion.contains(nonterminal.tostring)) {
+            for (String produccion : productions.get(nt)) {
+                if (produccion.contains(String.valueOf(nonterminal))) {
                     auxiliar.add(produccion);
                 }
-                for (String p : auxiliar) {
-                    this.removeProduction(nt, p);
-                }
             }
+
+            for (String p : auxiliar) {
+                removeProduction(nt, p);
+            }
+
+        }
+        if (productions.containsKey(nonterminal)) {
+            productions.remove(nonterminal);
         }
         if (nonterminals.contains(nonterminal)) {
             nonterminals.remove(nonterminal);
-        } else { // este else, hace que se lance una extepción si no está contenido en los noterminales.
+        } else {
             throw new CFGAlgorithmsException("El elemento no pertenece a la gramática.");
         }
     }
@@ -104,8 +107,21 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      *
      * @throws CFGAlgorithmsException Si el elemento no pertenece a la gramática
      */
-    public void removeTerminal(char terminal) throws CFGAlgorithmsException { // preguntar tutoría.
-        if (terminals.contains(terminal)) {
+    public void removeTerminal(char terminal) throws CFGAlgorithmsException {
+        for (Character nt : productions.keySet()) { // bucle que recorre los no terminales del mapa producciones.
+            List<String> auxiliar = new ArrayList(); // lista auxiliar.
+            for (String produccion : productions.get(nt)) { // bucle que recorre las producciones del mapa.
+                if (produccion.contains(String.valueOf(terminal))) { // condicional que comprueba si la producción contiene al terminal y añade la producción a la lista auxiliar.
+                    auxiliar.add(produccion);
+                }
+            }
+
+            for (String p : auxiliar) { // bucle que muestra el contenido la lista auxiliar y elimina la producción.
+                removeProduction(nt, p);
+            }
+
+        }
+        if (terminals.contains(terminal)) { // el condicional comprueba si el terminal está en el conjunto y lo elimina de él.
             terminals.remove(terminal);
         } else { // este else, hace que se lance una extepción si no está contenido en los terminales.
             throw new CFGAlgorithmsException("El elemento no pertenece a la gramática.");
@@ -238,7 +254,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * salida podría ser: "S::=aBb|bC|dC". Las producciones DEBEN IR ORDENADAS
      * POR ORDEN ALFABÉTICO.
      */
-    public String getProductionsToString(char nonterminal) { //preguntar tutoría.
+    public String getProductionsToString(char nonterminal) {
         String symbol = "::=";
         List<String> lista = productions.get(nonterminal); // señalo la lista del map productions.
         if (lista != null) { // este condicional devuelve " ", si es null.
@@ -297,19 +313,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return True si contiene ese tipo de reglas
      */
     public boolean hasUselessProductions() {
-        boolean answer = false; // variable donde guardo falso.
-        for (Character nonterminal : productions.keySet()) { // este bucle me devuelve las claves del mapa productions y las guarda en nonterminal.
-            for (String production : productions.get(nonterminal)) { // este bucle me devuelve los valores de productions y las guarda en production.
-                if (production.equals(nonterminal.toString())) {  // condicional para que si se cumple que production es igual a nonterminal guarda en answer true y rompe el primer bucle.
-                    answer = true;
-                    break;
-                }
-            }
-            if (answer) { // condicional que cuando le llegue el valor de answer rompe el segundo bucle.
-                break;
-            }
-        }
-        return answer;
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     /**
