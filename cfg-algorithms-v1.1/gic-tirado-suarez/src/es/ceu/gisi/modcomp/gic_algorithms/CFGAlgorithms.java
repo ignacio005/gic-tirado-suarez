@@ -339,18 +339,18 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * por cada producción), con todas las reglas innecesarias eliminadas.
      */
     public List<String> removeUselessProductions() {
-        List<String> productionstoremove = new ArrayList<>();
-        List<String> formattedlist = new ArrayList<>();
-        for (Character nonterminal : productions.keySet()) {
-            for (String production : productions.get(nonterminal)) {
+        List<String> productionstoremove = new ArrayList<>(); // lista de eliminados.
+        List<String> formattedlist = new ArrayList<>(); // lista a devolver.
+        for (Character nonterminal : productions.keySet()) { // bucle que me da los noterminales de productions.
+            for (String production : productions.get(nonterminal)) { // bucle que me da las producciones de productions.
                 if (production.equals(nonterminal.toString())) {
-                    productionstoremove.add(production);
-                    formattedlist.add(nonterminal + "::=" + production);
+                    productionstoremove.add(production); // añado producció a eliminar.
+                    formattedlist.add(nonterminal + "::=" + production); // añado el terminal y no terminal.
                 }
             }
-            productions.get(nonterminal).removeAll(productionstoremove);
+            productions.get(nonterminal).removeAll(productionstoremove); // elimino de la lista del mapa los que coincidan de la lista productionstoremove.
         }
-        return formattedlist;
+        return formattedlist; // devolver formattedlist.
     }
 
     /**
