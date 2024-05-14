@@ -280,7 +280,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * los elementos no terminales ORDENADOS POR ORDEN ALFABÉTICO.
      */
     public String getGrammar() {
-        String grammar = ""; // creo variable vacía
+        String grammar = ""; // creo variable vacía.
         grammar = getTerminals().toString() + ","; // guardo los terminales en la variable.
         grammar += getNonTerminals().toString() + ","; // guardo los no terminales en la variable.
         for (Character noterminal : nonterminals) { // bucle para que dé los noterminales del conjunto.
@@ -339,7 +339,18 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * por cada producción), con todas las reglas innecesarias eliminadas.
      */
     public List<String> removeUselessProductions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<String> productionstoremove = new ArrayList<>();
+        List<String> formattedlist = new ArrayList<>();
+        for (Character nonterminal : productions.keySet()) {
+            for (String production : productions.get(nonterminal)) {
+                if (production.equals(nonterminal.toString())) {
+                    productionstoremove.add(production);
+                    formattedlist.add(nonterminal + "::=" + production);
+                }
+            }
+            productions.get(nonterminal).removeAll(productionstoremove);
+        }
+        return formattedlist;
     }
 
     /**
@@ -349,7 +360,31 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * terminales eliminados.
      */
     public List<Character> removeUselessSymbols() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Set<String> viejo = new HashSet<>();
+        Set<String> nuevo = new HashSet<>();
+        List<Character> inutiles = new ArrayList<>();
+        for (Character terminal : terminals) {
+            for (Character nonterminal : nonterminals) {
+                for (String production : productions.get(nonterminal)) {
+                    if (production.contains(terminal.toString()) && !production.contains(nonterminal.toString())) {
+                        nuevo.add(nonterminal.toString());
+                        nuevo.add(production);
+                    }
+                    while (!viejo.equals(nuevo)) {
+                        viejo.addAll(nuevo);
+                        for (String elementsviejo : viejo) {
+                            if (production.contains(terminal.toString()) && !production.contains(nonterminal.toString()) || production.contains(elementsviejo)) {
+                                nuevo.add(production);
+                            }
+                        }
+                    }
+                    for (String elementsnuevo : nuevo) {
+                        inutiles.add(nonterminal);
+                    }
+                }
+            }
+        }
+        return inutiles;
     }
 
     /**
