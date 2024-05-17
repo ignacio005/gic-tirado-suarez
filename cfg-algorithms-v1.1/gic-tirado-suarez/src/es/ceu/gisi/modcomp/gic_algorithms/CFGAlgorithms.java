@@ -16,6 +16,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     private Set<Character> nonterminals = new TreeSet();
     private Set<Character> terminals = new TreeSet();
     private Map<Character, List<String>> productions = new TreeMap();
+    private Map<String, List<Character>> inverse = new TreeMap();
     private Character startsymbol;
 
     /**
@@ -202,6 +203,8 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
             throw new CFGAlgorithmsException();
         }
         productions.get(nonterminal).add(production);
+        inverse.putIfAbsent(production, new ArrayList<>());
+        inverse.get(production).add(nonterminal);
     }
 
     /**
@@ -219,6 +222,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         for (int i = 0; i < productions.get(nonterminal).size(); i++) { //bucle que recorre la lista de producciones del no terminal introducido
             if (productions.get(nonterminal).get(i).equals(production)) { //consigue la producción de la posicion por la que va en el bucle que recorre la lista de producciones y comprueba si la producción por la que va en el bucle es igual a la producción que buscamos
                 productions.get(nonterminal).remove(production); //elimina la produccion del no terminal introducido
+                inverse.get(production).remove(nonterminal);
                 return true; //devuelve true
             }
         }
@@ -473,20 +477,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return True si contiene ese tipo de reglas
      */
     public boolean hasLambdaProductions() {
-        boolean answer = false;
-        Character lambda = 'l';
-        for (Character nonterminal : nonterminals) {
-            for (String production : productions.get(nonterminal)) {
-                for (String productionstartsymbol : productions.get(startsymbol)) {
-                    if (production.contains(lambda.toString())) {
-                        return answer = true;
-                    }
-
-                }
-            }
-
-        }
-        return answer;
+        return !((inverse.get("l") == null) || (inverse.get("l").isEmpty()));
     }
 
     /**
@@ -509,7 +500,16 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return True si contiene ese tipo de reglas
      */
     public boolean hasUnitProductions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for (Character nonterminal : productions.keySet()) {
+            for (String production : productions.get(nonterminal)) {
+                for (Character terminal : terminals) {
+                    if (production.contains(nonterminal.toString()) && !production.contains(terminal.toString())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -519,7 +519,20 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * por cada producción), con todas las reglas unitarias eliminadas.
      */
     public List<String> removeUnitProductions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<String> unitproductionstoremove = new ArrayList<>();
+        for (Character nonterminal : productions.keySet()) {
+            for (String production : productions.get(nonterminal)) {
+                for (Character terminal : terminals) {
+                    if (production.contains(nonterminal.toString()) && !production.contains(terminal.toString())) {
+                        unitproductionstoremove.add(production);
+                    }
+
+                }
+            }
+            productions.get(nonterminal).removeAll(unitproductionstoremove);
+            unitproductionstoremove.clear();
+        }
+        return null;
     }
 
     /**
@@ -529,7 +542,11 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * inútiles.
      */
     public void transformToWellFormedGrammar() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        removeUselessSymbols();// innecesarias
+        removeUselessProductions();// no generativa
+        removeLambdaProductions();// unitarias
+        removeUnitProductions();// inutiles
+
     }
 
     /**
