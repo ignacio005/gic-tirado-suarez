@@ -490,7 +490,16 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * generativas y han sido tratadas.
      */
     public List<Character> removeLambdaProductions() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Character lambda = 'l';
+        for (Character nonterminal : productions.keySet()) {
+            for (String production : productions.get(nonterminal)) {
+                if (production.contains(lambda.toString())) {
+                    //removeProduction(nonterminal, production);
+                    nonterminals.remove(nonterminal);
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -500,10 +509,10 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return True si contiene ese tipo de reglas
      */
     public boolean hasUnitProductions() {
-        for (Character nonterminal : productions.keySet()) {
+        for (char nonterminal : productions.keySet()) {
             for (String production : productions.get(nonterminal)) {
-                for (Character terminal : terminals) {
-                    if (production.contains(nonterminal.toString()) && !production.contains(terminal.toString())) {
+                for (char letter : production.toCharArray()) {
+                    if (letter == nonterminal) {
                         return true;
                     }
                 }
@@ -542,10 +551,10 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * inútiles.
      */
     public void transformToWellFormedGrammar() {
-        removeUselessSymbols();// innecesarias
-        removeUselessProductions();// no generativa
-        removeLambdaProductions();// unitarias
-        removeUnitProductions();// inutiles
+        removeUselessProductions();// innecesarias
+        removeLambdaProductions();// no generativa
+        removeUnitProductions();// unitarias
+        removeUselessSymbols();// inutiles
 
     }
 
