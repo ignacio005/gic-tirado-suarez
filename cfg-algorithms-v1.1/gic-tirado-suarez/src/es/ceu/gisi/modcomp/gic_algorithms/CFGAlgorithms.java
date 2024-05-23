@@ -534,7 +534,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      */
     public void checkCNFProduction(char nonterminal, String production) throws CFGAlgorithmsException {
         if (production.equals("l")) { // condicional que comprueba el caso de producción igual a l.
-            if (nonterminal != startsymbol) { // si el no terminal no es el aximo lanzo extepción.
+            if (nonterminal != startsymbol) { // si el no terminal no es el axioma lanzo extepción.
                 throw new CFGAlgorithmsException("La producción l solo está permitida para el axioma.");
             }
         } else if (production.length() == 1) { // condicional que comprueba que la producción tiene longitud 1.
@@ -561,7 +561,29 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @return true Si la gramática está en Forma Normal de Chomsky
      */
     public boolean isCNF() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for (Character nonterminal : productions.keySet()) {
+            for (String production : productions.get(nonterminal)) {
+                if (production.equals("l")) { // condicional que comprueba el caso de producción igual a l.
+                    if (nonterminal != startsymbol) { // si el no terminal no es el axioma devuelvo false.
+                        return false;
+                    }
+                } else if (production.length() == 1) { // condicional que comprueba que la producción tiene longitud 1.
+                    char symbol = production.charAt(0);
+                    if (!Character.isLowerCase(symbol)) { // si no es minúscula la letra en la posición 0 devuelvo false.
+                        return false;
+                    }
+                } else if (production.length() == 2) { // condicional que comprueba que la producción tiene longitud 2.
+                    char symbol1 = production.charAt(0);
+                    char symbol2 = production.charAt(1);
+                    if (!Character.isUpperCase(symbol1) || !Character.isUpperCase(symbol2)) { // si no es mayúcula la letra en la posición 0 o posición 1 devuelvo false.
+                        return false;
+                    }
+                } else { // este else, devuelve false si no se cumple ninguna de las condiciones anteriores.
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
