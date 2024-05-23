@@ -222,7 +222,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         for (int i = 0; i < productions.get(nonterminal).size(); i++) { //bucle que recorre la lista de producciones del no terminal introducido
             if (productions.get(nonterminal).get(i).equals(production)) { //consigue la producción de la posicion por la que va en el bucle que recorre la lista de producciones y comprueba si la producción por la que va en el bucle es igual a la producción que buscamos
                 productions.get(nonterminal).remove(production); //elimina la produccion del no terminal introducido
-                inverse.get(production).remove(nonterminal);
+                //inverse.get(production).remove(nonterminal);
                 return true; //devuelve true
             }
         }
@@ -354,6 +354,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
             }
             productions.get(nonterminal).removeAll(productionstoremove); // elimino de la lista del mapa los que coincidan de la lista productionstoremove.
         }
+
         return formattedlist; // devolver formattedlist.
     }
 
@@ -364,108 +365,29 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * terminales eliminados.
      */
     public List<Character> removeUselessSymbols() {
-        // Algoritmo 1
-        Set<Character> viejo = new HashSet<>();
-        Set<Character> nuevo = new HashSet<>();
+        //no accesible ->  visitar caminos con cola
+        // D::=Db (1 prod, 1 bucle -> innecesaria)
+        Set<Character> setnt = new HashSet<>();
+        List<Character> deleted = new ArrayList<>();
         for (Character nonterminal : productions.keySet()) {
             for (String production : productions.get(nonterminal)) {
-                if (production.length() == 1 && terminals.contains(production.charAt(0))) {
-                    nuevo.add(nonterminal);
-                    break;
-                }
-            }
-        }
-        while (!viejo.equals(nuevo)) {
-            viejo.clear();
-            viejo.addAll(nuevo);
-            for (Character nt : viejo) {
-                for (Character nonterminal : productions.keySet()) {
-                    for (String production : productions.get(nonterminal)) {
-                        if (production.length() == 1 && viejo.contains(production.charAt(0))) {
-                            nuevo.add(nonterminal);
-                            break;
+                for (Character letter : production.toCharArray()) {
+                    if (Character.isLowerCase(letter)) {
+                        setnt.addAll(inverse.get(production));
+                        if (production.contains(setnt.toString())) {
+                            setnt.addAll(inverse.get(production));
                         }
                     }
                 }
+                setnt.retainAll(inverse.get(production));
+                inverse.get(production);
+                productions.get(nonterminal);
+                deleted.addAll(inverse.get(production));
+                //deleted.addAll(productions.get(nonterminal).c);
             }
-        }
-        if (!nuevo.containsAll(nonterminals)) {
-            List<Character> nonterminalstodeleted = new ArrayList();
-            for (char nonterminal : nonterminals) {
-                if (!nuevo.contains(nonterminal)) {
-                    nonterminalstodeleted.add(nonterminal);
-                }
-            }
-            nonterminals.clear();
-            nonterminals.addAll(nuevo);
-            for (char nonterminal : nonterminalstodeleted) {
-                productions.remove(nonterminal);
-
-            }
-        }
-        for (Character nonterminal : productions.keySet()) {
-            List<String> productionsAux = new ArrayList();
-            for (String production : productions.get(nonterminal)) {
-                if (production.length() == 1 && (terminals.contains(production.charAt(0)) || nonterminals.contains(production.charAt(0)))) {
-                    productionsAux.add(production);
-                }
-            }
-            productions.replace(nonterminal, productionsAux);
-        }
-        // Algoritmo 2
-        Set<Character> viejont = new HashSet<>();
-        Set<Character> nuevont = new HashSet<>();
-        nuevont.add(startsymbol);
-        Set<Character> viejot = new HashSet<>();
-        Set<Character> nuevot = new HashSet<>();
-
-        while (!viejont.equals(nuevont) || !nuevot.equals(viejot)) {// el error creo q está aqui preguntar.
-            viejont.clear();
-            viejot.clear();
-            viejont.addAll(nuevont);
-            viejot.addAll(nuevot);
-            for (char nonterminal : viejont) {
-                for (String production : productions.get(nonterminal)) {
-                    if (production.length() == 1 && nonterminals.contains(production.charAt(0))) {// revisar
-                        nuevont.add(production.charAt(0));
-                    }
-                    if (production.length() == 1 && terminals.contains(production.charAt(0))) {
-                        nuevot.add(production.charAt(0));
-                    }
-                }
-            }
-        }
-        if (!nuevont.containsAll(nonterminals)) {
-            List<Character> nonterminalstodeleted = new ArrayList();
-            for (char nonterminal : nonterminals) {
-                if (!nuevont.contains(nonterminal)) {
-                    nonterminalstodeleted.add(nonterminal);
-                }
-            }
-            nonterminals.clear();
-            nonterminals.addAll(nuevont);
-            for (char nonterminal : nonterminalstodeleted) {
-                productions.remove(nonterminal);
-
-            }
-        }
-        if (!nuevot.containsAll(terminals)) {
-            terminals.clear();
-            terminals.addAll(nuevot);
-        }
-        for (Character nonterminal : productions.keySet()) {
-            List<String> productionsAux = new ArrayList();
-            for (String production : productions.get(nonterminal)) {
-                if (production.length() == 1 && (terminals.contains(production.charAt(0)) || nonterminals.contains(production.charAt(0)))) {
-                    productionsAux.add(production);
-                }
-            }
-            productions.replace(nonterminal, productionsAux);
         }
 
-        List<Character> result = new ArrayList();
-        result.addAll(nuevont);
-        return result;
+        return deleted;
 
     }
 
@@ -491,11 +413,44 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      */
     public List<Character> removeLambdaProductions() {
         Character lambda = 'l';
+        Set<Character> viejo = new HashSet<>();
+        Set<Character> SA = new HashSet<>();
         for (Character nonterminal : productions.keySet()) {
             for (String production : productions.get(nonterminal)) {
-                if (production.contains(lambda.toString())) {
-                    //removeProduction(nonterminal, production);
-                    nonterminals.remove(nonterminal);
+                if (production.equalsIgnoreCase(lambda.toString())) {
+                    SA.add(nonterminal);
+                }
+            }
+        }
+        Set<Character> aux = new HashSet<>();
+        while (!viejo.equals(SA)) {
+            viejo.addAll(SA);
+            for (Character nonterminal : productions.keySet()) {
+                for (String production : productions.get(nonterminal)) {
+                    List<Character> pchar = new ArrayList<>();
+                    for (char letter : production.toCharArray()) {
+                        pchar.add(letter);
+                    }
+                    if (SA.containsAll(pchar)) {
+                        aux.add(nonterminal);
+
+                    }
+                }
+            }
+            SA.addAll(aux);
+            aux.clear();
+        }
+        // todo crea conjunto producciones
+        for (Character nonterminal : productions.keySet()) {
+            for (String production : productions.get(nonterminal)) {
+                char[] y1 = new char[production.length()];
+                for (int i = 0; i < production.length(); i++) {
+                    char letter = production.charAt(i);
+                    if (!SA.contains(letter)) {
+                        y1[i] = letter;
+                    } else {
+                        y1[i] = lambda;
+                    }
                 }
             }
         }
@@ -511,6 +466,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public boolean hasUnitProductions() {
         for (char nonterminal : productions.keySet()) {
             for (String production : productions.get(nonterminal)) {
+                // if de lenth 1
                 for (char letter : production.toCharArray()) {
                     if (letter == nonterminal) {
                         return true;
@@ -528,20 +484,26 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * por cada producción), con todas las reglas unitarias eliminadas.
      */
     public List<String> removeUnitProductions() {
-        List<String> unitproductionstoremove = new ArrayList<>();
-        for (Character nonterminal : productions.keySet()) {
-            for (String production : productions.get(nonterminal)) {
-                for (Character terminal : terminals) {
-                    if (production.contains(nonterminal.toString()) && !production.contains(terminal.toString())) {
-                        unitproductionstoremove.add(production);
-                    }
-
-                }
-            }
-            productions.get(nonterminal).removeAll(unitproductionstoremove);
-            unitproductionstoremove.clear();
-        }
+        //List<String> unitproductionstoremove = new ArrayList<>();
+        //for (Character nonterminal : productions.keySet()) {
+        //    for (String production : productions.get(nonterminal)) {
+        //        for (char letter : production.toCharArray()) {
+        //            if (production.length() == 1 && letter == nonterminal) {
+        //                unitproductionstoremove.add(production);
+        //                //removeProduction(nonterminal, production);
+        //            }
+        //
+        //        }
+        //        inverse.get(production).remove(nonterminal);
+        //    }
+        //    productions.get(nonterminal).removeAll(unitproductionstoremove);
+        //A::=B B::=C
+        //A -> B -> C (cola)
+        //unitproductionstoremove.clear();
+        // }
+        //return unitproductionstoremove;
         return null;
+
     }
 
     /**
@@ -571,7 +533,24 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * definidos previamente.
      */
     public void checkCNFProduction(char nonterminal, String production) throws CFGAlgorithmsException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (production.equals("l")) { // condicional que comprueba el caso de producción igual a l.
+            if (nonterminal != startsymbol) { // si el no terminal no es el aximo lanzo extepción.
+                throw new CFGAlgorithmsException("La producción l solo está permitida para el axioma.");
+            }
+        } else if (production.length() == 1) { // condicional que comprueba que la producción tiene longitud 1.
+            char symbol = production.charAt(0);
+            if (!Character.isLowerCase(symbol)) { // si no es minúscula la letra en la posición 0 lanzo extepción.
+                throw new CFGAlgorithmsException("Una producción de longitud 1 debe ser un terminal.");
+            }
+        } else if (production.length() == 2) { // condicional que comprueba que la producción tiene longitud 2.
+            char symbol1 = production.charAt(0);
+            char symbol2 = production.charAt(1);
+            if (!Character.isUpperCase(symbol1) || !Character.isUpperCase(symbol2)) { // si no es mayúcula la letra en la posición 0 o posición 1 lanzo extepción.
+                throw new CFGAlgorithmsException("Una producción de longitud 2 debe consistir en dos no terminales.");
+            }
+        } else { // este else, lanza una extepción si no se cumple ninguna de las condiciones anteriores.
+            throw new CFGAlgorithmsException("La producción no se ajusta a la Forma Normal de Chomsky.");
+        }
     }
 
     /**
