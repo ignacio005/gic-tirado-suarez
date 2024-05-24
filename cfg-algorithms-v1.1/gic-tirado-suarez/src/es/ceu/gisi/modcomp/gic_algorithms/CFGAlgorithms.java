@@ -412,49 +412,59 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * generativas y han sido tratadas.
      */
     public List<Character> removeLambdaProductions() {
-        Character lambda = 'l';
-        Set<Character> viejo = new HashSet<>();
-        Set<Character> SA = new HashSet<>();
-        for (Character nonterminal : productions.keySet()) {
-            for (String production : productions.get(nonterminal)) {
-                if (production.equalsIgnoreCase(lambda.toString())) {
-                    SA.add(nonterminal);
-                }
-            }
-        }
-        Set<Character> aux = new HashSet<>();
-        while (!viejo.equals(SA)) {
-            viejo.addAll(SA);
-            for (Character nonterminal : productions.keySet()) {
-                for (String production : productions.get(nonterminal)) {
-                    List<Character> pchar = new ArrayList<>();
-                    for (char letter : production.toCharArray()) {
-                        pchar.add(letter);
-                    }
-                    if (SA.containsAll(pchar)) {
-                        aux.add(nonterminal);
+        Set<Character> anulable = new HashSet<>();
+        List<Character> resultado = new ArrayList<>();
 
+        // Paso 1: Identificar los no terminales que se puedan transformar en lambda
+        boolean cambio;
+        do {
+            cambio = false;
+            for (Character nonterminal : productions.keySet()) {
+                for (String produccion : productions.get(nonterminal)) {
+                    if (produccion.equals("l") || produccion.chars().allMatch(c -> anulable.contains((char) c))) {
+                        if (anulable.add(nonterminal)) {
+                            cambio = true;
+                        }
                     }
                 }
             }
-            SA.addAll(aux);
-            aux.clear();
-        }
-        // todo crea conjunto producciones
+        } while (cambio);
+
+        // Paso 2: Generar nuevas producciones excluyendo los no terminales que se transforman en lambda
+        Map<Character, List<String>> nuevasProducciones = new HashMap<>();
         for (Character nonterminal : productions.keySet()) {
-            for (String production : productions.get(nonterminal)) {
-                char[] y1 = new char[production.length()];
-                for (int i = 0; i < production.length(); i++) {
-                    char letter = production.charAt(i);
-                    if (!SA.contains(letter)) {
-                        y1[i] = letter;
-                    } else {
-                        y1[i] = lambda;
+            List<String> produccionAuxiliar = new ArrayList<>();
+            for (String produccion : productions.get(nonterminal)) {
+                if (!produccion.equals("l")) {
+                    produccionAuxiliar.add(produccion);
+                    for (int i = 0; i < produccion.length(); i++) {
+                        if (anulable.contains(produccion.charAt(i))) {
+                            String nuevaProduccion = produccion.substring(0, i) + produccion.substring(i + 1);
+                            if (!nuevaProduccion.isEmpty() && !produccionAuxiliar.contains(nuevaProduccion)) {
+                                produccionAuxiliar.add(nuevaProduccion);
+                            }
+                        }
                     }
                 }
             }
+            nuevasProducciones.put(nonterminal, produccionAuxiliar);
         }
-        return null;
+
+        // Paso 3: Añadir la transformación de lambda al axioma en el caso de que sea necesario
+        if (anulable.contains(startsymbol)) {
+            List<String> produccionAxioma = nuevasProducciones.getOrDefault(startsymbol, new ArrayList<>());
+            if (!produccionAxioma.contains("l")) {
+                produccionAxioma.add("l");
+            }
+            nuevasProducciones.put(startsymbol, produccionAxioma);
+        }
+
+        // Actualizar las producciones
+        productions = nuevasProducciones;
+
+        // Devolver los no terminales que tenían producciones lambda
+        resultado.addAll(anulable);
+        return resultado;
     }
 
     /**
