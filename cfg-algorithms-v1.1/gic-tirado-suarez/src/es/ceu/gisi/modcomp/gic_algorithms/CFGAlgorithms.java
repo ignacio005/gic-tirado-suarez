@@ -365,29 +365,108 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * terminales eliminados.
      */
     public List<Character> removeUselessSymbols() {
-        //no accesible ->  visitar caminos con cola
-        // D::=Db (1 prod, 1 bucle -> innecesaria)
-        Set<Character> setnt = new HashSet<>();
-        List<Character> deleted = new ArrayList<>();
+        // Algoritmo 1
+        Set<Character> viejo = new HashSet<>();
+        Set<Character> nuevo = new HashSet<>();
         for (Character nonterminal : productions.keySet()) {
             for (String production : productions.get(nonterminal)) {
-                for (Character letter : production.toCharArray()) {
-                    if (Character.isLowerCase(letter)) { //todas las letras tiene que ser
-                        setnt.addAll(inverse.get(production));
-                        if (production.contains(setnt.toString())) {
-                            setnt.addAll(inverse.get(production));
+                if (production.length() == 1 && terminals.contains(production.charAt(0))) {
+                    nuevo.add(nonterminal);
+                    break;
+                }
+            }
+        }
+        while (!viejo.equals(nuevo)) {
+            viejo.clear();
+            viejo.addAll(nuevo);
+            for (Character nt : viejo) {
+                for (Character nonterminal : productions.keySet()) {
+                    for (String production : productions.get(nonterminal)) {
+                        if (production.length() == 1 && viejo.contains(production.charAt(0))) {
+                            nuevo.add(nonterminal);
+                            break;
                         }
                     }
                 }
-                setnt.retainAll(inverse.get(production));
-                inverse.get(production);
-                productions.get(nonterminal);
-                deleted.addAll(inverse.get(production));
-                //deleted.addAll(productions.get(nonterminal).c);
             }
         }
+        if (!nuevo.containsAll(nonterminals)) {
+            List<Character> nonterminalstodeleted = new ArrayList();
+            for (char nonterminal : nonterminals) {
+                if (!nuevo.contains(nonterminal)) {
+                    nonterminalstodeleted.add(nonterminal);
+                }
+            }
+            nonterminals.clear();
+            nonterminals.addAll(nuevo);
+            for (char nonterminal : nonterminalstodeleted) {
+                productions.remove(nonterminal);
 
-        return deleted;
+            }
+        }
+        for (Character nonterminal : productions.keySet()) {
+            List<String> productionsAux = new ArrayList();
+            for (String production : productions.get(nonterminal)) {
+                if (production.length() == 1 && (terminals.contains(production.charAt(0)) || nonterminals.contains(production.charAt(0)))) {
+                    productionsAux.add(production);
+                }
+            }
+            productions.replace(nonterminal, productionsAux);
+        }
+        // Algoritmo 2
+        Set<Character> viejont = new HashSet<>();
+        Set<Character> nuevont = new HashSet<>();
+        nuevont.add(startsymbol);
+        Set<Character> viejot = new HashSet<>();
+        Set<Character> nuevot = new HashSet<>();
+
+        while (!viejont.equals(nuevont) || !nuevot.equals(viejot)) {// el error creo q está aqui preguntar.
+            viejont.clear();
+            viejot.clear();
+            viejont.addAll(nuevont);
+            viejot.addAll(nuevot);
+            for (char nonterminal : viejont) {
+                for (String production : productions.get(nonterminal)) {
+                    if (production.length() == 1 && nonterminals.contains(production.charAt(0))) {// revisar
+                        nuevont.add(production.charAt(0));
+                    }
+                    if (production.length() == 1 && terminals.contains(production.charAt(0))) {
+                        nuevot.add(production.charAt(0));
+                    }
+                }
+            }
+        }
+        if (!nuevont.containsAll(nonterminals)) {
+            List<Character> nonterminalstodeleted = new ArrayList();
+            for (char nonterminal : nonterminals) {
+                if (!nuevont.contains(nonterminal)) {
+                    nonterminalstodeleted.add(nonterminal);
+                }
+            }
+            nonterminals.clear();
+            nonterminals.addAll(nuevont);
+            for (char nonterminal : nonterminalstodeleted) {
+                productions.remove(nonterminal);
+
+            }
+        }
+        if (!nuevot.containsAll(terminals)) {
+            terminals.clear();
+            terminals.addAll(nuevot);
+        }
+        for (Character nonterminal : productions.keySet()) {
+            List<String> productionsAux = new ArrayList();
+            for (String production : productions.get(nonterminal)) {
+                if (production.length() == 1 && (terminals.contains(production.charAt(0)) || nonterminals.contains(production.charAt(0)))) {
+                    productionsAux.add(production);
+                }
+            }
+            productions.replace(nonterminal, productionsAux);
+        }
+
+        List<Character> result = new ArrayList();
+        result.addAll(nuevont);
+        return result;
 
     }
 
