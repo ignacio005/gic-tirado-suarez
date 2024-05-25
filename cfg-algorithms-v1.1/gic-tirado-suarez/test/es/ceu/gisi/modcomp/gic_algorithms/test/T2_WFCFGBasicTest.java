@@ -10,8 +10,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-
-
 /**
  * Clase que testea el correcto funcionamiento de la implementación de los
  * algoritmos de limpieza de gramáticas y la obtención de una gramática bien
@@ -29,15 +27,11 @@ public class T2_WFCFGBasicTest {
 
     private CFGAlgorithms gica;
 
-
-
     public T2_WFCFGBasicTest() throws IOException, FileNotFoundException, CFGAlgorithmsException {
     }
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-
-
 
     @Test
     public void comprobarTieneReglasInnecesarias1() throws CFGAlgorithmsException {
@@ -51,8 +45,6 @@ public class T2_WFCFGBasicTest {
         assertTrue(gica.hasUselessProductions());
     }
 
-
-
     @Test
     public void comprobarTieneReglasInnecesarias2() throws CFGAlgorithmsException {
         gica = new CFGAlgorithms();
@@ -63,8 +55,6 @@ public class T2_WFCFGBasicTest {
 
         assertFalse(gica.hasUselessProductions());
     }
-
-
 
     @Test
     public void comprobarTieneReglasInnecesarias3() throws CFGAlgorithmsException {
@@ -78,8 +68,6 @@ public class T2_WFCFGBasicTest {
 
         assertFalse(gica.hasUselessProductions());
     }
-
-
 
     @Test
     public void comprobarEliminarReglasInnecesarias() throws CFGAlgorithmsException {
@@ -101,8 +89,6 @@ public class T2_WFCFGBasicTest {
 
     }
 
-
-
     @Test
     public void eliminarSimbolosInnecesarios1() throws CFGAlgorithmsException {
         gica = new CFGAlgorithms();
@@ -123,8 +109,6 @@ public class T2_WFCFGBasicTest {
         assertTrue(gica.getTerminals().size() == 1);
         assertEquals("S::=a", gica.getProductionsToString('S'));
     }
-
-
 
     @Test
     public void eliminarSimbolosInnecesarios2() throws CFGAlgorithmsException {
@@ -169,8 +153,6 @@ public class T2_WFCFGBasicTest {
         assertEquals("E::=l", gica.getProductionsToString('E'));
     }
 
-
-
     @Test
     public void contieneProduccionesLambda1() throws CFGAlgorithmsException {
         gica = new CFGAlgorithms();
@@ -189,8 +171,6 @@ public class T2_WFCFGBasicTest {
 
         assertTrue(gica.hasLambdaProductions());
     }
-
-
 
     @Test
     public void contieneProduccionesLambda2() throws CFGAlgorithmsException {
@@ -227,8 +207,6 @@ public class T2_WFCFGBasicTest {
         assertTrue(gica.hasLambdaProductions());
     }
 
-
-
     @Test
     public void noContieneProduccionesLambda1() throws CFGAlgorithmsException {
         gica = new CFGAlgorithms();
@@ -246,8 +224,6 @@ public class T2_WFCFGBasicTest {
 
         assertFalse(gica.hasLambdaProductions());
     }
-
-
 
     @Test
     public void eliminaProduccionesLambda1() throws CFGAlgorithmsException {
@@ -291,8 +267,6 @@ public class T2_WFCFGBasicTest {
         assertTrue(gica.getProductions('D') == null || gica.getProductions('D').isEmpty());
     }
 
-
-
     @Test
     public void eliminaProduccionesLambda2() throws CFGAlgorithmsException {
         gica = new CFGAlgorithms();
@@ -312,8 +286,6 @@ public class T2_WFCFGBasicTest {
 
         assertEquals("S::=aSb|ab|l", gica.getProductionsToString('S'));
     }
-
-
 
     @Test
     public void eliminaProduccionesLambda3() throws CFGAlgorithmsException {
@@ -348,8 +320,6 @@ public class T2_WFCFGBasicTest {
         assertEquals("A::=Aa|B|BE|BEE|E|EE|a|b|bA", gica.getProductionsToString('A'));
     }
 
-
-
     @Test
     public void comprobarTieneReglasUnitarias1() throws CFGAlgorithmsException {
         gica = new CFGAlgorithms();
@@ -365,8 +335,6 @@ public class T2_WFCFGBasicTest {
 
         assertTrue(gica.hasUnitProductions());
     }
-
-
 
     @Test
     public void eliminarReglasUnitarias1() throws CFGAlgorithmsException {
@@ -407,8 +375,6 @@ public class T2_WFCFGBasicTest {
         assertEquals("C::=Aa|BE|a|b|bB|c", gica.getProductionsToString('C'));
         assertEquals("E::=c", gica.getProductionsToString('E'));
     }
-
-
 
     @Test
     public void comprobarGramáticaBienFormada1() throws CFGAlgorithmsException {
@@ -451,8 +417,6 @@ public class T2_WFCFGBasicTest {
         assertEquals("B::=Bb|b", gica.getProductionsToString('B'));
         assertEquals("S::=AB|Aa|Bb|a|aA|aAS|aS|b|l", gica.getProductionsToString('S'));
     }
-
-
 
     @Test
     public void comprobarGramáticaBienFormada2() throws CFGAlgorithmsException {

@@ -186,12 +186,12 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * @throws CFGAlgorithmsException Si está compuesta por elementos
      * (terminales o no terminales) no definidos previamente.
      */
-    public void addProduction(char nonterminal, String production) throws CFGAlgorithmsException { //preguntar en tutoria: error 8 si es por si se repite.
+    public void addProduction(char nonterminal, String production) throws CFGAlgorithmsException {
 
-        if (!nonterminals.contains(nonterminal)) { // este condicional compruba que sino esta contenido el no terminal en el conjunto lanza extepción.
+        if (!nonterminals.contains(nonterminal)) { // este condicional comprueba que si no esta contenido el no terminal en el conjunto lanza extepción.
             throw new CFGAlgorithmsException("Estás utilizando elementos terminales o no terminales no definidos en el conjunto.");
         }
-        for (int i = 0; i < production.length(); i++) { // bucle que rrecorre letra por letra la producción introducida.
+        for (int i = 0; i < production.length(); i++) { // bucle que recorre letra por letra la producción introducida.
             char letter = production.charAt(i);
             if (!(letter == 'l' || nonterminals.contains(letter) || terminals.contains(letter))) { // este condicional comprueba que este en terminales, no terminales o tenga l y sino se cumple lanzo extepción.
                 throw new CFGAlgorithmsException("Estás utilizando elementos terminales o no terminales no definidos en el conjunto.");
@@ -372,7 +372,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         for (Character nonterminal : productions.keySet()) {
             for (String production : productions.get(nonterminal)) {
                 for (Character letter : production.toCharArray()) {
-                    if (Character.isLowerCase(letter)) {
+                    if (Character.isLowerCase(letter)) { //todas las letras tiene que ser
                         setnt.addAll(inverse.get(production));
                         if (production.contains(setnt.toString())) {
                             setnt.addAll(inverse.get(production));
@@ -416,19 +416,18 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         List<Character> resultado = new ArrayList<>();
 
         // Paso 1: Identificar los no terminales que se puedan transformar en lambda
-        boolean cambio;
+        boolean cambio = false;
         do {
-            cambio = false;
             for (Character nonterminal : productions.keySet()) {
                 for (String produccion : productions.get(nonterminal)) {
-                    if (produccion.equals("l") || produccion.chars().allMatch(c -> anulable.contains((char) c))) {
+                    if (produccion.equals("l")) {
                         if (anulable.add(nonterminal)) {
                             cambio = true;
                         }
                     }
                 }
             }
-        } while (cambio);
+        } while (cambio = false);
 
         // Paso 2: Generar nuevas producciones excluyendo los no terminales que se transforman en lambda
         Map<Character, List<String>> nuevasProducciones = new HashMap<>();
@@ -453,9 +452,7 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
         // Paso 3: Añadir la transformación de lambda al axioma en el caso de que sea necesario
         if (anulable.contains(startsymbol)) {
             List<String> produccionAxioma = nuevasProducciones.getOrDefault(startsymbol, new ArrayList<>());
-            if (!produccionAxioma.contains("l")) {
-                produccionAxioma.add("l");
-            }
+            produccionAxioma.add("l");
             nuevasProducciones.put(startsymbol, produccionAxioma);
         }
 
@@ -625,7 +622,65 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
      * introducida, si la gramática es vacía o si el autómata carece de axioma.
      */
     public boolean isDerivedUsignCYK(String word) throws CFGAlgorithmsException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (!isCNF()) {
+            throw new CFGAlgorithmsException("La gramática no está en Forma Normal de Chomsky.");
+        }
+
+        if (word.isEmpty()) {
+            return false;
+        }
+
+        for (int i = 0; i < word.length(); i++) {
+            char letter = word.charAt(i);
+            if (!terminals.contains(letter)) {
+                throw new CFGAlgorithmsException("La palabra contiene caracteres que no están en el conjunto de terminales.");
+            }
+        }
+
+        if (productions.isEmpty() || startsymbol == null) {
+            throw new CFGAlgorithmsException("La gramática está vacía o no tiene axioma.");
+        }
+
+        int n = word.length();
+        int r = nonterminals.size();
+
+        Set<Character>[][] table = new HashSet[n][n];
+        for (int i = 0; i < n; i++) {
+            table[i][0] = new HashSet<>();
+            char terminal = word.charAt(i);
+            for (Map.Entry<Character, List<String>> entry : productions.entrySet()) {
+                char nonterminal = entry.getKey();
+                for (String production : entry.getValue()) {
+                    if (production.length() == 1 && production.charAt(0) == terminal) {
+                        table[i][0].add(nonterminal);
+                    }
+                }
+            }
+        }
+
+        for (int l = 2; l <= n; l++) {
+            for (int s = 0; s <= n - l; s++) {
+                table[s][l - 1] = new HashSet<>();
+                for (int p = 1; p < l; p++) {
+                    Set<Character> bSet = table[s][p - 1];
+                    Set<Character> cSet = table[s + p][l - p - 1];
+                    for (char b : bSet) {
+                        for (char c : cSet) {
+                            for (Map.Entry<Character, List<String>> entry : productions.entrySet()) {
+                                char a = entry.getKey();
+                                for (String production : entry.getValue()) {
+                                    if (production.length() == 2 && production.charAt(0) == b && production.charAt(1) == c) {
+                                        table[s][l - 1].add(a);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return table[0][n - 1].contains(startsymbol);
     }
 
     /**
@@ -648,4 +703,5 @@ public class CFGAlgorithms implements CFGInterface, WFCFGInterface, CNFInterface
     public String algorithmCYKStateToString(String word) throws CFGAlgorithmsException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
 }
